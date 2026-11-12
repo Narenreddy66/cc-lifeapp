@@ -1,0 +1,61 @@
+name: Build CC Lite APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Accept Android SDK licenses
+        run: yes | sdkmanager --licenses >/dev/null 2>&1 || true
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Build debug APK
+        run: gradle assembleDebug --no-daemon --stacktrace
+
+      - name: Stage APK
+        run: |
+          mkdir -p /tmp/out
+          cp app/build/outputs/apk/debug/app-debug.apk /tmp/out/LIFE-CC.apk
+
+      - name: Publish GitHub Release (browser download)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete cc-v1 -y --cleanup-tag 2>/dev/null || true
+          gh release create cc-v1 /tmp/out/LIFE-CC.apk \
+            --title "LIFE CC v1 (sideload APK)" \
+            --notes "Standalone Call Centre app. Download LIFE-CC.apk and install it on the phone (allow install from unknown sources)."
+
+      - name: Push APK to apk branch
+        run: |
+          git config user.email actions@github.com
+          git config user.name github-actions
+          git checkout --orphan apk
+          find . -maxdepth 1 -mindepth 1 -not -name '.git' -exec rm -rf {} +
+          cp /tmp/out/LIFE-CC.apk ./LIFE-CC.apk
+          git add LIFE-CC.apk
+          git commit -m "APK build"
+          git push -f origin apk
+
+      - name: Upload artifact (backup)
+        uses: actions/upload-artifact@v4
+        with:
+          name: LIFE-CC-apk
+          path: /tmp/out/LIFE-CC.apk

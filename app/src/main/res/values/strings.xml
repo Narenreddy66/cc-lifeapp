@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">LIFE CC</string>
+    <!-- Change this one line to point the app at a different page -->
+    <string name="start_url">https://portal.lifescc.com/new-mobile-login-LIFE_CC_APP_LITE_BHUVAN</string>
+</resources>

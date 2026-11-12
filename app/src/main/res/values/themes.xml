@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.CCLite" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/life_green</item>
+        <item name="android:navigationBarColor">@color/life_green</item>
+        <item name="android:windowBackground">@color/life_green</item>
+    </style>
+</resources>

@@ -1,0 +1,6 @@
+<resources>
+    <color name="life_green">#FF0A3A2A</color>
+    <color name="life_green_dark">#FF072A1E</color>
+    <color name="life_gold">#FFC9A65A</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
