@@ -27,6 +27,8 @@ android {
 }
 
 dependencies {
+    // Align all Kotlin stdlib modules to one version (fixes "Duplicate class kotlin.collections.jdk8")
+    implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.22')
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 }
